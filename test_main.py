@@ -1,26 +1,58 @@
-import unittest
+#include "pch.h"
+#include "CppUnitTest.h"
+#include <forward_list>
+using namespace std;
 
-from unittest import TestCase
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-from main import remove_value_from_list
+namespace UnitTest122
+{
+	TEST_CLASS(UnitTest122)
+	{
+	public:
 
+		TEST_METHOD(TestRemoveNextOccurrence)
+		{
+			// Arrange
+			forward_list<int> numbers = { 4, 5, 1, 4, 2, 3, 4 };
+			int input = 4;
+			int expected[] = { 4, 1, 4, 3, 4 };
+			int index = 0;
 
-class TestRemoveValueFromList(unittest.TestCase):
+			// Act
+			for (auto it = numbers.begin(); it != numbers.end(); ++it) {
+				if (*it == input && next(it) != numbers.end()) {
+					it = numbers.erase_after(it);
+				}
+			}
 
-    def test_removes_first_instance_of_value(self):
-        list = [1, 2, 3, 4, 5]
-        value = 3
-        new_list = remove_value_from_list(list, value)
-        self.assertEqual(new_list, [1, 2, 3, 5])
+			// Assert
+			for (auto number : numbers) {
+				Assert::AreEqual(expected[index], number);
+				index++;
+			}
+		}
 
-    def test_returns_original_list_if_value_not_present(self):
-        list = [1, 2, 3, 4, 5]
-        value = 6
-        new_list = remove_value_from_list(list, value)
-        self.assertEqual(new_list, [1, 2, 3, 4, 5])
+		TEST_METHOD(TestRemoveNextOccurrenceNotFound)
+		{
+			// Arrange
+			forward_list<int> numbers = { 4, 5, 1, 4, 2, 3, 4 };
+			int input = 6;
+			int expected[] = { 4, 5, 1, 4, 2, 3, 4 };
+			int index = 0;
 
-    def test_removes_only_first_instance_of_value(self):
-        list = [1, 2, 3, 4, 6, 5]
-        value = 3
-        new_list = remove_value_from_list(list, value)
-        self.assertEqual(new_list, [1, 2, 3, 6, 5])
+			// Act
+			for (auto it = numbers.begin(); it != numbers.end(); ++it) {
+				if (*it == input && next(it) != numbers.end()) {
+					it = numbers.erase_after(it);
+				}
+			}
+
+			// Assert
+			for (auto number : numbers) {
+				Assert::AreEqual(expected[index], number);
+				index++;
+			}
+		}
+	};
+}
